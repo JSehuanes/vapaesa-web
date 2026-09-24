@@ -4,65 +4,73 @@ require_once __DIR__ . '/inc/config.php';
 
 $pagina = 'portafolio';
 $titulo = 'Portafolio · vapaesa';
-$descripcion = 'Avisos en acero, neonflex, vallas, vinilos y papelería fabricados en Barranquilla.';
+$descripcion = 'Avisos en acero, bastidores y volumétricos fabricados en Barranquilla.';
 
 require __DIR__ . '/inc/head.php';
 require __DIR__ . '/inc/header.php';
 
-$trabajos = [
-  ['img' => 'aviso-acero-inoxidable.jpg', 'titulo' => 'Aviso Terra Mar en acero inoxidable', 'cat' => 'avisos'],
-  ['img' => 'avisos-volumetricos.jpg', 'titulo' => 'Avisos volumétricos 3D', 'cat' => 'avisos'],
-  ['img' => 'aviso-neonflex.jpg', 'titulo' => 'Aviso OPEN en acrílico y neonflex', 'cat' => 'neonflex'],
-  ['img' => 'aviso-tijera.jpg', 'titulo' => 'Aviso tipo tijera en madera', 'cat' => 'avisos'],
-  ['img' => 'valla-estructural.jpg', 'titulo' => 'Valla publicitaria estructural', 'cat' => 'gran-formato'],
-  ['img' => 'vinilos-fachada.jpg', 'titulo' => 'Vinilos decorativos en fachada', 'cat' => 'gran-formato'],
-  ['img' => 'letras-acero.jpg', 'titulo' => 'Letras en acero inoxidable con volumen', 'cat' => 'avisos'],
-  ['img' => 'obra-1.jpg', 'titulo' => 'Instalación en sitio', 'cat' => 'gran-formato'],
-  ['img' => 'obra-2.jpg', 'titulo' => 'Acabado de aviso', 'cat' => 'avisos'],
-  ['img' => 'obra-3.jpg', 'titulo' => 'Montaje de pieza', 'cat' => 'gran-formato'],
-  ['img' => 'obra-4.jpg', 'titulo' => 'Detalle de fabricación', 'cat' => 'avisos'],
-  ['img' => 'obra-8.jpg', 'titulo' => 'Producción en taller', 'cat' => 'gran-formato'],
-];
+$carousel = ['car-1.jpg', 'car-2.jpg', 'car-3.jpg', 'car-4.jpg'];
+$letras = ['letra-1.jpg', 'letra-2.jpg', 'letra-3.jpg'];
+$bastidores = ['letra-4.jpg', 'bas-1.jpg', 'bas-2.jpg', 'bas-3.jpg', 'bas-4.jpg', 'bas-5.jpg', 'bas-6.jpg', 'bas-7.jpg', 'bas-8.jpg', 'bas-9.jpg'];
 ?>
 
 <main id="contenido">
-  <section class="page-hero">
+  <section class="porta">
     <div class="wrap">
-      <p class="kicker">Portafolio</p>
-      <h1>Anuncios que se instalan, no solo se diseñan</h1>
-      <p>Acero, acrílico, lona, vinilo y madera. Cada pieza sale del taller de Barranquilla.</p>
-    </div>
-  </section>
+      <h1 class="porta-title">Anuncios publicitarios.</h1>
 
-  <section class="section">
-    <div class="wrap">
-      <div class="filters" role="group" aria-label="Filtrar trabajos">
-        <button class="filter is-on" type="button" data-filter="todo">Todo</button>
-        <button class="filter" type="button" data-filter="avisos">Avisos</button>
-        <button class="filter" type="button" data-filter="neonflex">Neonflex</button>
-        <button class="filter" type="button" data-filter="gran-formato">Gran formato</button>
+      <div class="porta-split">
+        <div class="porta-carousel" data-carousel>
+          <?php foreach ($carousel as $i => $img): ?>
+            <figure class="porta-slide" data-slide<?= $i === 0 ? '' : ' hidden' ?>>
+              <img src="assets/img/portafolio/<?= e($img) ?>" alt="Aviso en acero inoxidable" />
+            </figure>
+          <?php endforeach; ?>
+          <div class="porta-dots">
+            <?php foreach ($carousel as $i => $_): ?>
+              <button type="button" class="porta-dot<?= $i === 0 ? ' is-on' : '' ?>" data-dot aria-label="Foto <?= (int) $i + 1 ?>"></button>
+            <?php endforeach; ?>
+          </div>
+        </div>
+        <div class="porta-copy">
+          <h2>AVISO - Realizado en acero inoxidable cromado.</h2>
+          <p>Este proyecto lo realizamos para uno de los condominios más exclusivos de la costa. Letras fabricadas en acero inoxidable con un acabado tipo espejo, calibre 16 con 10 cm de volumen, con un marco en lámina galvanizada.</p>
+          <p>Este aviso se definió de esta manera pensando en su alta durabilidad, protegiendo la inversión de nuestro cliente.</p>
+        </div>
       </div>
 
-      <div class="gallery">
-        <?php foreach ($trabajos as $t): ?>
-          <figure class="shot" data-cat="<?= e($t['cat']) ?>">
-            <img src="assets/img/trabajos/<?= e($t['img']) ?>" alt="<?= e($t['titulo']) ?>" />
-            <figcaption><?= e($t['titulo']) ?></figcaption>
-          </figure>
+      <div class="porta-letras">
+        <?php foreach ($letras as $img): ?>
+          <img src="assets/img/portafolio/<?= e($img) ?>" alt="Letra en acero inoxidable" />
         <?php endforeach; ?>
       </div>
-    </div>
-  </section>
+      <p class="porta-nota">Este tipo de materiales son altamente utilizados en la publicidad en exteriores e interiores. Con nuestras capacidades logramos darles acabados especiales según cada tipo de necesidad: sistemas de iluminación integrada o de proyección indirecta, acabado texturizado, pintado o efectos especiales como el oro.</p>
 
-  <section class="section" style="padding-top:0">
-    <div class="wrap prose">
-      <h2>AVISO · Acero inoxidable cromado</h2>
-      <p>Letras en acero inoxidable con acabado tipo espejo, calibre 16 y volumen, con marco en lámina. Pensado para alta durabilidad en exterior e interior, protegiendo la inversión del cliente. Usamos sistemas de sujeción e iluminación según cada necesidad.</p>
-      <h2>AVISO · Tipo bastidores</h2>
-      <p>Marcos con lona, a escala de empresa. En proyectos grandes la logística de instalación la hace personal capacitado: piezas de varios metros de largo y alto, listas para fachada.</p>
-      <h2>AVISOS volumétricos (3D)</h2>
-      <p>Los avisos en acrílico son una alternativa resistente y duradera. Transparencia, color y volumen para que el negocio se lea de lejos y de cerca.</p>
-      <p><a class="btn btn-wa" href="<?= e(wa_cotizar('Portafolio / un trabajo similar')) ?>" target="_blank" rel="noopener noreferrer">Quiero algo así</a></p>
+      <div class="porta-split porta-split-rev">
+        <div class="porta-copy">
+          <h2>AVISO - Tipo bastidores.</h2>
+          <p>Un proyecto a gran escala realizado para una empresa de gran escala. Los avisos tipo bastidores no son más que unos marcos decorados con lona, muy similar a un cuadro artístico pero con materiales más resistentes pensados para la intemperie.</p>
+        </div>
+        <div class="porta-thumbs">
+          <?php foreach ($bastidores as $img): ?>
+            <img src="assets/img/portafolio/<?= e($img) ?>" alt="Aviso tipo bastidor" />
+          <?php endforeach; ?>
+        </div>
+      </div>
+      <p class="porta-nota">Las dimensiones totales de los bastidores suman 36 metros de largo por 4 metros de alto, por lo que la logística para la instalación se realiza con personal altamente capacitado. Estructura realizada en aluminio para hacerla más ligera pero resistente, impresión digital en banner de 13 oz. Gracias a nuestros equipos de gran formato podemos llevar a cabo este tipo de proyectos de una manera más eficiente y accesible para nuestros clientes.</p>
+
+      <div class="porta-vol">
+        <img class="porta-vol-tall" src="assets/img/portafolio/vol-1.jpg" alt="Aviso volumétrico en acrílico" />
+        <div class="porta-copy">
+          <h2>AVISOS Volumétricos (3D)</h2>
+          <p>En este tipo de aviso nos quedamos cortos en mencionar que son los más utilizados para imagen de toda empresa o negocio que desea ser vista de una manera más profesional y llegar a sus clientes con seguridad.</p>
+        </div>
+        <div class="porta-vol-stack">
+          <img src="assets/img/portafolio/vol-2.jpg" alt="Fabricación de aviso volumétrico" />
+          <p>Los avisos en acrílico son piezas publicitarias o informativas fabricadas en acrílico. Este material es una alternativa más resistente y duradera que el vidrio y se caracteriza por su transparencia, colores y brillo. Son ideales para interiores y exteriores, resistentes a la intemperie y a los rayos UV. Pueden personalizarse con impresiones digitales de alta calidad, son fáciles de instalar y mantener, y se usan en tiendas, hoteles, oficinas y centros comerciales.</p>
+          <img src="assets/img/portafolio/vol-3.jpg" alt="Aviso volumétrico KOFTA" />
+        </div>
+      </div>
     </div>
   </section>
 </main>

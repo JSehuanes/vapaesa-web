@@ -7,10 +7,10 @@ const MAIL_TO = 'comercial@vapaesa.com';
 const MAIL_FROM = 'noreply@vapaesa.com';
 const WA_NUMBER = '573007144925';
 const PHONE_DISPLAY = '300 714 4925';
-const ADDRESS = 'Calle 42 # 41 - 72 Local 1';
+const ADDRESS = 'Calle 42 # 41 - 42 Local: 102 - 103';
 const CITY = 'Barranquilla, Atlántico';
 const INSTAGRAM = 'https://www.instagram.com/vapaesa/';
-const MAPS_URL = 'https://www.google.com/maps/search/?api=1&query=Calle+42+%2341-72+Local+1+Barranquilla';
+const MAPS_URL = 'https://www.google.com/maps/search/?api=1&query=Calle+42+%2341-42+Local+102+103+Barranquilla';
 
 function wa_url(string $mensaje): string
 {

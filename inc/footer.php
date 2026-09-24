@@ -55,7 +55,11 @@
   </div>
   <div class="quote-view" data-view="cart" hidden>
     <h2>Tu cotización</h2>
+    <p class="quote-summary" data-quote-summary></p>
     <ul class="quote-list" data-quote-list></ul>
+    <label class="quote-note-label" for="quote-note">Nota para el asesor <span>(opcional)</span></label>
+    <textarea id="quote-note" class="quote-note" data-quote-note rows="3" placeholder="Ciudad, marcación, colores, fecha de entrega…"></textarea>
+    <p class="quote-hint">Un asesor te confirmará valores, marcación y envío por WhatsApp.</p>
     <div class="quote-actions">
       <a class="btn btn-outline" href="<?= e(u('productos')) ?>">Agregar otro</a>
       <button type="button" class="btn btn-wa" data-quote-send-cart>Enviar por WhatsApp</button>

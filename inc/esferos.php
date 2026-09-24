@@ -108,10 +108,10 @@ function esferos_por_handle(string $handle): ?array
         return null;
     }
     $p = esferos_buscar_cache($handle);
-    if ($p === null) {
+    if ($p === null || !array_key_exists('descripcion', $p)) {
         $json = esferos_get_json('/products/' . rawurlencode($handle) . '.json');
         $item = is_array($json['product'] ?? null) ? $json['product'] : null;
-        $p = $item !== null ? esferos_normalizar($item) : null;
+        $p = $item !== null ? esferos_normalizar($item) : $p;
     }
     if ($p === null) {
         return null;
@@ -449,6 +449,7 @@ function esferos_normalizar(array $item): ?array
     }
 
     $skus = array_values(array_filter(array_map(static fn(array $v): string => $v['sku'], $variantes)));
+    $desc = esferos_limpiar_html((string) ($item['body_html'] ?? ''));
 
     return [
         'id' => $id,
@@ -460,8 +461,110 @@ function esferos_normalizar(array $item): ?array
         'imagen' => $galeria[0] ?? '',
         'galeria' => $galeria,
         'variantes' => $variantes,
+        'descripcion' => $desc,
         'categorias' => [],
     ];
+}
+
+function esferos_limpiar_html(string $html): string
+{
+    $html = html_entity_decode($html, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $html = strip_tags($html, '<p><br><ul><ol><li><strong><b><em><i>');
+    $html = preg_replace('/\s+/u', ' ', $html) ?? $html;
+    return trim($html);
+}
+
+/**
+ * @param list<array<string,mixed>> $productos
+ * @return list<array<string,mixed>>
+ */
+function esferos_ordenar(array $productos, string $orden): array
+{
+    $lista = $productos;
+    if ($orden === 'za') {
+        usort($lista, static fn(array $a, array $b): int => strcasecmp((string) $b['nombre'], (string) $a['nombre']));
+    } elseif ($orden === 'stock') {
+        usort($lista, static function (array $a, array $b): int {
+            $da = !empty($a['disponible']) ? 0 : 1;
+            $db = !empty($b['disponible']) ? 0 : 1;
+            if ($da !== $db) {
+                return $da <=> $db;
+            }
+            return strcasecmp((string) $a['nombre'], (string) $b['nombre']);
+        });
+    } else {
+        usort($lista, static fn(array $a, array $b): int => strcasecmp((string) $a['nombre'], (string) $b['nombre']));
+    }
+    return $lista;
+}
+
+/**
+ * @param array<string,mixed> $p
+ * @return list<array<string,mixed>>
+ */
+function esferos_vars_disponibles(array $p): array
+{
+    $vars = is_array($p['variantes'] ?? null) ? $p['variantes'] : [];
+    return array_values(array_filter($vars, static fn(array $v): bool => !empty($v['disponible'])));
+}
+
+/**
+ * @param list<array<string,mixed>> $productos
+ * @param array<string,mixed> $actual
+ * @return list<array<string,mixed>>
+ */
+function esferos_relacionados(array $productos, array $actual, int $limite = 8): array
+{
+    $handle = (string) ($actual['handle'] ?? '');
+    $cats = is_array($actual['categorias'] ?? null) ? $actual['categorias'] : [];
+    $hijos = array_keys(esferos_menu()['promocionales']['hijos']);
+    $prio = [];
+    foreach ($cats as $c) {
+        if ($c === 'esferos' || in_array($c, $hijos, true)) {
+            $prio[] = $c;
+        }
+    }
+    $out = [];
+    foreach ($productos as $p) {
+        if ((string) ($p['handle'] ?? '') === $handle) {
+            continue;
+        }
+        if (empty($p['disponible'])) {
+            continue;
+        }
+        $pc = is_array($p['categorias'] ?? null) ? $p['categorias'] : [];
+        $ok = $prio === [] || array_intersect($prio, $pc) !== [];
+        if ($ok) {
+            $out[] = $p;
+        }
+        if (count($out) >= $limite) {
+            break;
+        }
+    }
+    if (count($out) < $limite) {
+        foreach ($productos as $p) {
+            if ((string) ($p['handle'] ?? '') === $handle) {
+                continue;
+            }
+            if (empty($p['disponible'])) {
+                continue;
+            }
+            $ya = false;
+            foreach ($out as $o) {
+                if ($o['handle'] === $p['handle']) {
+                    $ya = true;
+                    break;
+                }
+            }
+            if (!$ya) {
+                $out[] = $p;
+            }
+            if (count($out) >= $limite) {
+                break;
+            }
+        }
+    }
+    return $out;
 }
 
 /** @return array<string,mixed>|null */

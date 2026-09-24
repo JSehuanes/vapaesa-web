@@ -18,6 +18,21 @@ $descripcion = 'Cotiza ' . $p['nombre'] . '. Referencia y unidades disponibles. 
 $ref = $p['sku'] !== '' ? $p['sku'] : $p['nombre'];
 $volver = u('productos') . ($cat !== '' ? '?cat=' . rawurlencode($cat) : '');
 $vars = $p['variantes'];
+$varsOk = esferos_vars_disponibles($p);
+$etiqueta = esferos_etiqueta($p, $cat);
+
+$ambitoRel = $cat !== '' ? $cat : '';
+if ($ambitoRel === '' && is_array($p['categorias'] ?? null)) {
+    foreach ($p['categorias'] as $c) {
+        if ($c === 'esferos' || isset(esferos_menu()['promocionales']['hijos'][$c])) {
+            $ambitoRel = (string) $c;
+            break;
+        }
+    }
+}
+$relBase = esferos_catalogo($ambitoRel !== '' ? $ambitoRel : '');
+$relacionados = esferos_relacionados($relBase['productos'], $p, 8);
+$relacionados = esferos_con_stock($relacionados);
 
 require __DIR__ . '/inc/head.php';
 require __DIR__ . '/inc/header.php';
@@ -49,14 +64,16 @@ require __DIR__ . '/inc/header.php';
           <?php endif; ?>
         </div>
         <div class="ficha-info">
+          <p class="ficha-cat"><?= e($etiqueta) ?></p>
           <p class="catalog-stock<?= !empty($p['disponible']) ? ' is-in' : '' ?>">
             <?= !empty($p['disponible']) ? 'En stock' : 'Agotado' ?>
           </p>
           <h1><?= e($p['nombre']) ?></h1>
+
           <form class="ficha-quote" data-quote-add>
             <input type="hidden" name="handle" value="<?= e((string) $p['handle']) ?>" />
             <input type="hidden" name="nombre" value="<?= e((string) $p['nombre']) ?>" />
-            <input type="hidden" name="etiqueta" value="<?= e(esferos_etiqueta($p, $cat)) ?>" />
+            <input type="hidden" name="etiqueta" value="<?= e($etiqueta) ?>" />
             <?php if (count($vars) <= 1): ?>
               <?php
                 $v0 = $vars[0] ?? ['sku' => $ref, 'titulo' => '', 'disponible' => !empty($p['disponible'])];
@@ -107,14 +124,45 @@ require __DIR__ . '/inc/header.php';
                 ?>
               </fieldset>
             <?php endif; ?>
-            <button class="btn btn-wa" type="submit"<?= empty($p['disponible']) ? ' disabled' : '' ?>>
-              Cotizar esta referencia
-            </button>
+            <div class="ficha-cta">
+              <button class="btn btn-wa" type="submit"<?= empty($p['disponible']) || $varsOk === [] ? ' disabled' : '' ?>>
+                Cotizar esta referencia
+              </button>
+              <a class="btn btn-outline" href="<?= e(wa_cotizar($p['nombre'])) ?>" target="_blank" rel="noopener noreferrer">WhatsApp directo</a>
+            </div>
+            <p class="ficha-hint">Sin precios en web: te confirmamos valor, marcación y envío por WhatsApp.</p>
           </form>
+
+          <?php if (($p['descripcion'] ?? '') !== ''): ?>
+            <div class="ficha-desc">
+              <h2>Descripción</h2>
+              <div class="ficha-desc-body"><?= $p['descripcion'] ?></div>
+            </div>
+          <?php endif; ?>
         </div>
       </article>
     </div>
   </section>
+
+  <?php if ($relacionados !== []): ?>
+    <section class="section section-tight ficha-rel">
+      <div class="wrap">
+        <h2 class="ficha-rel-title">También te puede interesar</h2>
+        <div class="catalog-grid catalog-grid-rel">
+          <?php foreach ($relacionados as $r): ?>
+            <a class="catalog-card<?= !empty($r['disponible']) ? '' : ' is-out' ?>" href="<?= e(esferos_local((string) $r['handle'], $cat !== '' ? $cat : $ambitoRel)) ?>">
+              <div class="catalog-shot">
+                <?php if ($r['imagen'] !== ''): ?>
+                  <img src="<?= e(esferos_imagen($r['imagen'])) ?>" alt="<?= e($r['nombre']) ?>" loading="lazy" width="640" height="640" />
+                <?php endif; ?>
+              </div>
+              <h3><?= e($r['nombre']) ?></h3>
+            </a>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    </section>
+  <?php endif; ?>
 </main>
 
 <dialog class="catalog-lightbox" id="catalog-lightbox" aria-label="Galería del producto">

@@ -139,6 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const KEY = "vapaesa-cotizacion";
+  const KEY_NOTE = "vapaesa-cotizacion-nota";
   const dialog = document.querySelector("#quote-dialog");
   const waNumber = dialog?.dataset.wa || "";
   let pending = null;
@@ -154,7 +155,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const saveCart = (items) => {
     localStorage.setItem(KEY, JSON.stringify(items));
+    if (!items.length) {
+      localStorage.removeItem(KEY_NOTE);
+    }
     paintBadges();
+  };
+
+  const loadNote = () => localStorage.getItem(KEY_NOTE) || "";
+  const saveNote = (text) => {
+    const t = String(text || "").trim();
+    if (t) localStorage.setItem(KEY_NOTE, t);
+    else localStorage.removeItem(KEY_NOTE);
   };
 
   const itemKey = (item) => [item.handle, item.sku, item.titulo].join("::");
@@ -173,28 +184,46 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const paintBadges = () => {
-    const n = loadCart().length;
+    const items = loadCart();
+    const n = items.length;
+    const units = items.reduce((s, it) => s + (Number(it.qty) || 0), 0);
     document.querySelectorAll(".quote-badge").forEach((el) => {
       el.hidden = n === 0;
       el.textContent = String(n);
+      el.title = n ? n + " ref. · " + units + " und" : "";
     });
   };
 
   const fmt = (n) => Number(n).toLocaleString("es-CO");
 
   const waHref = (items) => {
-    const lines = items.map((it) => {
+    const lines = items.map((it, i) => {
       const tag = it.etiqueta ? `(${it.etiqueta}) ` : "";
       const ref = [it.sku, it.titulo].filter(Boolean).join(" · ");
-      return `${tag}• ${it.nombre}${ref ? " — " + ref : ""} × ${fmt(it.qty)} und`;
+      return `${i + 1}. ${tag}${it.nombre}${ref ? " — " + ref : ""} × ${fmt(it.qty)} und`;
     });
-    const msg = "Hola, quiero realizar una cotización. *vapaesa* :\n\n" + lines.join("\n") + "\n\nGracias.";
+    const units = items.reduce((s, it) => s + (Number(it.qty) || 0), 0);
+    const note = loadNote().trim();
+    let msg =
+      "Hola Vapaesa, quiero cotizar:\n\n" +
+      lines.join("\n") +
+      "\n\nTotal: " +
+      items.length +
+      " referencia(s), " +
+      fmt(units) +
+      " und.";
+    if (note) {
+      msg += "\n\nNotas: " + note;
+    }
+    msg += "\n\nQuedo atento a su asesoría. Gracias.";
     return "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(msg);
   };
 
   const sendWhatsApp = () => {
     const items = loadCart();
     if (!items.length || !waNumber) return;
+    const noteEl = dialog?.querySelector("[data-quote-note]");
+    if (noteEl) saveNote(noteEl.value);
     window.open(waHref(items), "_blank", "noopener,noreferrer");
   };
 
@@ -309,8 +338,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const items = loadCart();
     const list = dialog.querySelector("[data-quote-list]");
     const send = dialog.querySelector("[data-quote-send-cart]");
+    const summary = dialog.querySelector("[data-quote-summary]");
+    const noteEl = dialog.querySelector("[data-quote-note]");
     list.innerHTML = "";
     send.disabled = items.length === 0;
+    const units = items.reduce((s, it) => s + (Number(it.qty) || 0), 0);
+    if (summary) {
+      summary.textContent = items.length
+        ? items.length + " referencia(s) · " + fmt(units) + " und en total"
+        : "";
+    }
+    if (noteEl) {
+      noteEl.value = loadNote();
+    }
     items.forEach((it, index) => {
       const li = document.createElement("li");
       const ref = [it.sku, it.titulo].filter(Boolean).join(" · ");
@@ -321,7 +361,8 @@ document.addEventListener("DOMContentLoaded", () => {
         '<label>Cant. <input type="number" min="1" step="1" inputmode="numeric" /></label>' +
         '<button type="button" class="quote-remove">Quitar</button>';
       li.querySelector("strong").textContent = it.nombre;
-      li.querySelector("span").textContent = ref + (hasMax ? " · máx. " + fmt(maxN) : "");
+      li.querySelector("span").textContent =
+        (it.etiqueta ? it.etiqueta + " · " : "") + ref + (hasMax ? " · máx. " + fmt(maxN) : "");
       const qty = li.querySelector("input");
       qty.value = String(it.qty);
       qty.addEventListener("change", async () => {
@@ -336,10 +377,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const next = loadCart();
         next[index].qty = n;
         saveCart(next);
+        paintCart();
       });
       li.querySelector(".quote-remove").addEventListener("click", () => {
         saveCart(loadCart().filter((_, i) => i !== index));
         paintCart();
+        if (!loadCart().length) openEmpty();
       });
       list.appendChild(li);
     });
@@ -399,8 +442,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   dialog?.querySelector("[data-quote-send]")?.addEventListener("click", async () => {
     if (!(await confirmPending())) return;
-    dialog.close();
-    sendWhatsApp();
+    openCart();
+  });
+
+  dialog?.querySelector("[data-quote-note]")?.addEventListener("input", (ev) => {
+    saveNote(ev.target.value);
   });
 
   dialog?.querySelector("[data-quote-alert-ok]")?.addEventListener("click", () => {

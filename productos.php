@@ -38,7 +38,7 @@ function catalogo_url(string $q, string $cat, int $page = 1): string
     if ($page > 1) {
         $params['page'] = (string) $page;
     }
-    return 'productos.php' . ($params !== [] ? '?' . http_build_query($params) : '');
+    return u('productos') . ($params !== [] ? '?' . http_build_query($params) : '');
 }
 
 require __DIR__ . '/inc/head.php';
@@ -55,7 +55,7 @@ require __DIR__ . '/inc/header.php';
 
   <section class="section section-tight">
     <div class="wrap">
-      <form class="catalog-toolbar" method="get" action="productos.php">
+      <form class="catalog-toolbar" method="get" action="<?= e(u('productos')) ?>">
         <label class="sr-only" for="q">Buscar</label>
         <input id="q" name="q" type="search" value="<?= e($q) ?>" placeholder="Buscar por nombre o referencia (SKU)" />
         <?php if ($cat !== ''): ?>

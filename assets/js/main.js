@@ -394,7 +394,7 @@ document.addEventListener("DOMContentLoaded", () => {
   dialog?.querySelector("[data-quote-more]")?.addEventListener("click", async () => {
     if (!(await confirmPending())) return;
     dialog.close();
-    window.location.assign("productos.php");
+    window.location.assign((window.VAPAESA_BASE || "") + "/productos");
   });
 
   dialog?.querySelector("[data-quote-send]")?.addEventListener("click", async () => {

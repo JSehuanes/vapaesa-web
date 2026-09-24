@@ -54,7 +54,7 @@ require __DIR__ . '/inc/header.php';
         <h1>Diseñamos, fabricamos e instalamos <span data-cycle-word>Avisos</span>.</h1>
         <p>Estás buscando un servicio confiable en publicidad. Avisos, vallas, plotter y papelería — a la medida del local y de la marca.</p>
         <div class="hero-actions home-hero-actions">
-          <a class="btn btn-wa" href="contacto.php">Contáctanos por correo</a>
+          <a class="btn btn-wa" href="<?= e(u('contacto')) ?>">Contáctanos por correo</a>
           <a class="btn btn-outline" href="<?= e(wa_cotizar()) ?>" target="_blank" rel="noopener noreferrer">Asesoría por WhatsApp</a>
         </div>
       </div>
@@ -106,11 +106,11 @@ require __DIR__ . '/inc/header.php';
           <p class="eyebrow">Servicios</p>
           <h2>Qué hacemos en el taller.</h2>
         </div>
-        <a class="btn btn-outline" href="servicios.php">Ver servicios</a>
+        <a class="btn btn-outline" href="<?= e(u('servicios')) ?>">Ver servicios</a>
       </div>
       <div class="home-serv">
         <?php foreach ($servicios as $s): ?>
-          <a class="home-serv-card" href="servicios.php#<?= e($s['id']) ?>">
+          <a class="home-serv-card" href="<?= e(u('servicios')) ?>#<?= e($s['id']) ?>">
             <p class="eyebrow"><?= e($s['n']) ?></p>
             <h3><?= e($s['titulo']) ?></h3>
             <p><?= e($s['txt']) ?></p>
@@ -128,7 +128,7 @@ require __DIR__ . '/inc/header.php';
           <p class="eyebrow">Portafolio</p>
           <h2>Conoce un poco de lo que hemos realizado.</h2>
         </div>
-        <a class="btn btn-outline" href="portafolio.php">Portafolio completo</a>
+        <a class="btn btn-outline" href="<?= e(u('portafolio')) ?>">Portafolio completo</a>
       </div>
       <div class="filters" role="tablist">
         <button type="button" class="filter is-on" data-filter="todo">Todo</button>
@@ -140,7 +140,7 @@ require __DIR__ . '/inc/header.php';
       <div class="home-obras">
         <?php foreach ($obras as $obra): ?>
           <figure class="shot" data-cat="<?= e($obra['cat']) ?>">
-            <a href="portafolio.php">
+            <a href="<?= e(u('portafolio')) ?>">
               <img src="assets/img/trabajos/<?= e($obra['img']) ?>" alt="<?= e($obra['alt']) ?>" />
             </a>
             <figcaption><?= e($obra['alt']) ?></figcaption>
@@ -187,7 +187,7 @@ require __DIR__ . '/inc/header.php';
       </div>
       <div class="hero-actions">
         <a class="btn btn-wa" href="<?= e(wa_cotizar()) ?>" target="_blank" rel="noopener noreferrer">WhatsApp cotización</a>
-        <a class="btn btn-ghost" href="contacto.php">Escribir al correo</a>
+        <a class="btn btn-ghost" href="<?= e(u('contacto')) ?>">Escribir al correo</a>
       </div>
     </div>
   </section>

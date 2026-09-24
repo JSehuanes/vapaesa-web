@@ -1,7 +1,7 @@
 <footer class="site-footer">
   <div class="wrap footer-grid">
     <div>
-      <img class="footer-logo" src="assets/img/logo-blanco.svg" alt="vapaesa" width="220" height="41" />
+      <img class="footer-logo" src="<?= e(u('assets/img/logo-blanco.svg')) ?>" alt="vapaesa" width="220" height="41" />
       <p class="footer-tag"><?= e(SITE_TAGLINE) ?></p>
       <p><a href="<?= e(INSTAGRAM) ?>" target="_blank" rel="noopener noreferrer">Instagram @vapaesa</a></p>
     </div>
@@ -16,12 +16,12 @@
       <h2>Habla con nosotros</h2>
       <p><a class="footer-wa" href="<?= e(wa_cotizar()) ?>" target="_blank" rel="noopener noreferrer">Pedir cotización por WhatsApp</a></p>
       <p><a class="footer-wa" href="<?= e(wa_vendedor()) ?>" target="_blank" rel="noopener noreferrer">Atención con un vendedor</a></p>
-      <p><a href="contacto.php">Escribir a comercial</a></p>
+      <p><a href="<?= e(u('contacto')) ?>">Escribir a comercial</a></p>
     </div>
   </div>
   <div class="wrap footer-bottom">
     <p>© <?= date('Y') ?> vapaesa · BQ, CO</p>
-    <a href="privacidad.php">Política de protección de datos</a>
+    <a href="<?= e(u('privacidad')) ?>">Política de protección de datos</a>
   </div>
 </footer>
 
@@ -50,14 +50,14 @@
     <h2>Cotización</h2>
     <p class="quote-empty">Para solicitar cotización selecciona los productos que deseas.</p>
     <div class="quote-actions">
-      <a class="btn btn-wa" href="productos.php">Ver productos</a>
+      <a class="btn btn-wa" href="<?= e(u('productos')) ?>">Ver productos</a>
     </div>
   </div>
   <div class="quote-view" data-view="cart" hidden>
     <h2>Tu cotización</h2>
     <ul class="quote-list" data-quote-list></ul>
     <div class="quote-actions">
-      <a class="btn btn-outline" href="productos.php">Agregar otro</a>
+      <a class="btn btn-outline" href="<?= e(u('productos')) ?>">Agregar otro</a>
       <button type="button" class="btn btn-wa" data-quote-send-cart>Enviar por WhatsApp</button>
     </div>
   </div>
@@ -70,6 +70,7 @@
   </div>
 </dialog>
 
-<script src="assets/js/main.js?v=<?= e(asset_v()) ?>"></script>
+<script>window.VAPAESA_BASE = <?= json_encode(site_base(), JSON_UNESCAPED_SLASHES) ?>;</script>
+<script src="<?= e(u('assets/js/main.js')) ?>?v=<?= e(asset_v()) ?>"></script>
 </body>
 </html>

@@ -94,9 +94,9 @@ function esferos_ficha(string $handle): string
 
 function esferos_local(string $handle, string $cat = ''): string
 {
-    $url = 'producto.php?p=' . rawurlencode($handle);
+    $url = u('producto/' . rawurlencode($handle));
     if ($cat !== '') {
-        $url .= '&cat=' . rawurlencode($cat);
+        $url .= '?cat=' . rawurlencode($cat);
     }
     return $url;
 }

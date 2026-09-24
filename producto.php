@@ -8,7 +8,7 @@ $cat = trim((string) ($_GET['cat'] ?? ''));
 $p = esferos_por_handle($handle);
 
 if ($p === null) {
-    header('Location: productos.php', true, 302);
+    header('Location: ' . u('productos'), true, 302);
     exit;
 }
 
@@ -16,7 +16,7 @@ $pagina = 'productos';
 $titulo = $p['nombre'] . ' · vapaesa';
 $descripcion = 'Cotiza ' . $p['nombre'] . '. Referencia y unidades disponibles. Sin precios.';
 $ref = $p['sku'] !== '' ? $p['sku'] : $p['nombre'];
-$volver = 'productos.php' . ($cat !== '' ? '?cat=' . rawurlencode($cat) : '');
+$volver = u('productos') . ($cat !== '' ? '?cat=' . rawurlencode($cat) : '');
 $vars = $p['variantes'];
 
 require __DIR__ . '/inc/head.php';

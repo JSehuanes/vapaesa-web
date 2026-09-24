@@ -1,2 +1,17 @@
 DirectoryIndex index.php
 AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Archivos y carpetas reales (assets, etc.)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # /producto/handle → producto.php?p=handle
+  RewriteRule ^producto/([^/]+)/?$ producto.php?p=$1 [L,QSA]
+
+  # /productos, /servicios, /contacto, etc.
+  RewriteRule ^(portafolio|productos|servicios|contacto|privacidad|enviar)/?$ $1.php [L,QSA]
+</IfModule>

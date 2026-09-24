@@ -57,7 +57,7 @@ require __DIR__ . '/inc/header.php';
         <?php elseif ($error): ?>
           <p class="alert alert-err">No se pudo enviar. Escribe directo a <?= e(MAIL_TO) ?>.</p>
         <?php endif; ?>
-        <form class="form form-contacto" action="enviar.php" method="post">
+        <form class="form form-contacto" action="<?= e(u('enviar')) ?>" method="post">
           <div class="hp" aria-hidden="true">
             <label>No llenar <input type="text" name="empresa_web" tabindex="-1" autocomplete="off"></label>
           </div>

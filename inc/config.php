@@ -63,6 +63,39 @@ function site_env(): array
     return $env;
 }
 
+/** Base del sitio (/vapaesa-web en local, '' en dominio raíz). */
+function site_base(): string
+{
+    static $base = null;
+    if ($base !== null) {
+        return $base;
+    }
+    $fromEnv = trim((string) (site_env()['SITE_BASE'] ?? ''));
+    if ($fromEnv !== '') {
+        $base = $fromEnv === '/' ? '' : rtrim($fromEnv, '/');
+        return $base;
+    }
+    $script = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? ''));
+    $dir = dirname($script);
+    if ($dir === '/' || $dir === '\\' || $dir === '.' || $dir === '') {
+        $base = '';
+    } else {
+        $base = rtrim($dir, '/');
+    }
+    return $base;
+}
+
+/** Ruta pública del sitio: u('productos'), u('producto/x'), u() = inicio. */
+function u(string $path = ''): string
+{
+    $path = ltrim($path, '/');
+    $base = site_base();
+    if ($path === '') {
+        return $base === '' ? '/' : $base . '/';
+    }
+    return ($base === '' ? '' : $base) . '/' . $path;
+}
+
 /** Versión de assets para romper caché (CSS/JS). Sube el número en .env tras cada deploy. */
 function asset_v(): string
 {

@@ -14,7 +14,7 @@ function esferos_menu(): array
 {
     return [
         'esferos' => [
-            'label' => 'Esferos',
+            'label' => 'Bolígrafos',
             'hijos' => [],
         ],
         'promocionales' => [
@@ -67,7 +67,7 @@ function esferos_etiqueta(array $p, string $cat = ''): string
 {
     $cats = esferos_categorias();
     if ($cat === 'esferos') {
-        return 'Esferos';
+        return 'Bolígrafos';
     }
     if ($cat !== '' && $cat !== 'promocionales' && isset($cats[$cat])) {
         return $cats[$cat];
@@ -77,7 +77,7 @@ function esferos_etiqueta(array $p, string $cat = ''): string
         $handles = [];
     }
     if (in_array('esferos', $handles, true)) {
-        return 'Esferos';
+        return 'Bolígrafos';
     }
     foreach (esferos_menu()['promocionales']['hijos'] as $handle => $label) {
         if (in_array($handle, $handles, true)) {

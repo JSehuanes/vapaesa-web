@@ -130,7 +130,6 @@ require __DIR__ . '/inc/header.php';
               </button>
               <a class="btn btn-outline" href="<?= e(wa_cotizar($p['nombre'])) ?>" target="_blank" rel="noopener noreferrer">WhatsApp directo</a>
             </div>
-            <p class="ficha-hint">Sin precios en web: te confirmamos valor, marcación y envío por WhatsApp.</p>
           </form>
 
           <?php if (($p['descripcion'] ?? '') !== ''): ?>

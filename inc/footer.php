@@ -43,7 +43,7 @@
     <p class="quote-ask">¿Quieres cotizar otro producto?</p>
     <div class="quote-actions">
       <button type="button" class="btn btn-outline" data-quote-more>Sí, agregar otro</button>
-      <button type="button" class="btn btn-wa" data-quote-send>No, enviar por WhatsApp</button>
+      <button type="button" class="btn btn-wa" data-quote-send>Solo cotizar este producto</button>
     </div>
   </div>
   <div class="quote-view" data-view="empty" hidden>

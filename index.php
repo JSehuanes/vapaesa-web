@@ -151,11 +151,16 @@ require __DIR__ . '/inc/header.php';
   </section>
 
   <section class="home-marca">
+    <div class="home-marca-bg" aria-hidden="true">
+      <img src="<?= e(u('assets/img/marca-saludo.jpg')) ?>" alt="" width="1600" height="900" />
+    </div>
     <div class="wrap home-marca-inner">
-      <img src="assets/img/logo-blanco.svg" alt="vapaesa" width="180" height="34" />
-      <p>«vapaesa» se establece como una solución estratégica para satisfacer la demanda de productos y servicios de alta calidad en el ámbito de medios impresos y publicidad.</p>
-      <p>Nuestra marca promueve una identidad autóctona que enfatiza los valores de compromiso, sentido de pertenencia, respeto y vocación de servicio.</p>
-      <p>Un saludo distintivo y universal simboliza nuestra imagen, acompañado de una frase que refleja la determinación de nuestra marca.</p>
+      <img class="home-marca-logo" src="<?= e(u('assets/img/logo-blanco.svg')) ?>" alt="vapaesa" width="200" height="38" />
+      <div class="home-marca-copy">
+        <p>Vapaesa es la solución estratégica para quienes buscan productos y servicios de alta calidad en medios impresos y publicidad.</p>
+        <p>Nuestra identidad autóctona se fundamenta en valores como el compromiso, el sentido de pertenencia, el respeto y la vocación de servicio.</p>
+        <p class="home-marca-destaque">Nos identifica un saludo distintivo y universal, junto a la expresión que refleja la determinación de nuestra marca.</p>
+      </div>
     </div>
   </section>
 

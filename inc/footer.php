@@ -70,6 +70,6 @@
   </div>
 </dialog>
 
-<script src="assets/js/main.js?v=11"></script>
+<script src="assets/js/main.js?v=<?= e(asset_v()) ?>"></script>
 </body>
 </html>

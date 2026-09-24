@@ -688,23 +688,7 @@ function esferos_aplicar_inventario(array $productos, array $porHandle): array
 /** @return array<string,string> */
 function esferos_env(): array
 {
-    static $env = null;
-    if (is_array($env)) {
-        return $env;
-    }
-    $env = [];
-    $path = dirname(__DIR__) . '/.env';
-    if (!is_file($path)) {
-        return $env;
-    }
-    foreach (file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $line) {
-        if (!str_contains($line, '=') || str_starts_with(ltrim($line), '#')) {
-            continue;
-        }
-        [$k, $v] = explode('=', $line, 2);
-        $env[trim($k)] = trim($v);
-    }
-    return $env;
+    return function_exists('site_env') ? site_env() : [];
 }
 
 function esferos_cookie_path(): string

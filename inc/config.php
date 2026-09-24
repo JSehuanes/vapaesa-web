@@ -40,3 +40,32 @@ function nav_class(string $pagina, string $actual): string
 {
     return $pagina === $actual ? 'is-active' : '';
 }
+
+/** Lee la raíz del sitio: .env (claves = valor). */
+function site_env(): array
+{
+    static $env = null;
+    if (is_array($env)) {
+        return $env;
+    }
+    $env = [];
+    $path = dirname(__DIR__) . '/.env';
+    if (!is_file($path)) {
+        return $env;
+    }
+    foreach (file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $line) {
+        if (!str_contains($line, '=') || str_starts_with(ltrim($line), '#')) {
+            continue;
+        }
+        [$k, $v] = explode('=', $line, 2);
+        $env[trim($k)] = trim($v);
+    }
+    return $env;
+}
+
+/** Versión de assets para romper caché (CSS/JS). Sube el número en .env tras cada deploy. */
+function asset_v(): string
+{
+    $v = site_env()['ASSET_VERSION'] ?? '1';
+    return preg_replace('/[^0-9A-Za-z._-]/', '', $v) ?: '1';
+}
